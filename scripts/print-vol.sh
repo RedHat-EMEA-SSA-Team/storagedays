@@ -10,4 +10,4 @@ VOL=$(oc describe pv $PV | grep 'Path:' | awk '{print $2}')
 OCS_POD=$(oc get po -n $OCS_PROJECT -l glusterfs-node=pod --no-headers | head -1 |awk '{print $1}' )
 # get volume info
 echo 'Displaying volume '$VOL' info thru pod '$OCS_POD
-oc rsh $OCS_POD gluster volume info $VOL
+oc rsh -n $OCS_PROJECT $OCS_POD gluster volume info $VOL

@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  generation: 1
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: prometheus-k8s-rules-sd
+  namespace: openshift-monitoring
+spec:
+  groups:
+  - name: storagedays-storage
+    rules:
+    - alert: StorageDaysPersistentVolumeUsageCritical
+      annotations:
+        message: The persistent volume claimed by {{ $labels.persistentvolumeclaim
+          }} in namespace {{ $labels.namespace }} has {{ printf "%0.0f" $value }}%
+          free.
+      expr: |
+        100 * kubelet_volume_stats_available_bytes{namespace="exported_storagedays",job="kubelet"}
+          /
+        kubelet_volume_stats_capacity_bytes{namespace="exported_storagedays",job="kubelet"}
+          < 80
+      for: 1m
+      labels:
+        severity: critical
