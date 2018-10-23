@@ -3,7 +3,8 @@
 # get pv name
 APP_PROJECT=$1
 OCS_PROJECT=ocs
-PV=$(oc get pvc -n $APP_PROJECT --no-headers | awk '{print $3}')
+PVC=$2
+PV=$(oc get pvc $2 -n $APP_PROJECT --no-headers | awk '{print $3}')
 # get volume id
 VOL=$(oc describe pv $PV | grep 'Path:' | awk '{print $2}')
 # get gluster pod name
