@@ -14,7 +14,7 @@ spec:
     - alert: StorageDaysPersistentVolumeUsageCritical
       annotations:
         message: The persistent volume claimed by {{ $labels.persistentvolumeclaim
-          }} in namespace {{ $labels.namespace }} has {{ printf "%0.0f" $value }}%
+          }} in namespace {{ $labels.exported_namespace }} has {{ printf "%0.0f" $value }}%
           free.
       expr: |
         100 * kubelet_volume_stats_available_bytes{namespace="exported_storagedays",job="kubelet"}
